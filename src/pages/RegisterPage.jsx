@@ -2,17 +2,31 @@ import styles from "../styles/LoginPage.module.css";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useNavigate } from "react-router";
 
 const loginSchema = z.object({
-    name_Surname: z.string().regex(/^\S+$/, "ห้ามมีช่องว่าง").min(1,"กรุณากรอกชื่อ-นามสกุล"),
-    user: z.string().regex(/\w/,"ต้องเป็นภาษาอังกฤษหรือ ตัวเลขเท่านั้น").min(3,"ต้องมีความยาว3-12 ตัวอักษร").max(12,"ต้องมีความยาว3-12 ตัวอักษร"),
-    email: z.string().min(1, "กรุณากรอกอีเมล์").email("อีเมล์ไม่ถูกต้อง"),
-    password: z.string().min(8, "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร"),
-    confirmPassword: z.string()//,
+    name_Surname: z
+        .string()
+        .regex(/^\S+$/, "ห้ามมีช่องว่าง")
+        .min(1, "กรุณากรอกชื่อ-นามสกุล"),
+    user: z
+        .string()
+        .regex(/^[a-zA-Z0-9]+$/, "ต้องเป็นภาษาอังกฤษหรือ ตัวเลขเท่านั้น")
+        .min(3, "ต้องมีความยาว3-12 ตัวอักษร")
+        .max(12, "ต้องมีความยาว3-12 ตัวอักษร"),
+    email: z
+        .string()
+        .min(1, "กรุณากรอกอีเมล์")
+        .email("อีเมล์ไม่ถูกต้อง"),
+    password: z
+        .string()
+        .min(8, "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร"),
+    confirmPassword: z
+        .string()//,
     //Tel: z.string().regex(/08\d{8}$/,"กรุณากรอกตัวเลข 10 ตัว")
-}).refine((data)=> data.password === data.confirmPassword,{
-    path:["confirmPassword"],
-    message:"รหัสผ่านไม่ตรงกัน"
+}).refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "รหัสผ่านไม่ตรงกัน"
 });
 
 export default function RegisterPage() {
@@ -26,9 +40,12 @@ export default function RegisterPage() {
         resolver: zodResolver(loginSchema),
     });
 
+    const navigate = useNavigate();
+
     const onSubmit = async (data) => {
         alert('สมัครสมาชิกสำเร็จ!');
         console.log(data);
+        navigate("/")
     }
 
     return (
@@ -38,7 +55,7 @@ export default function RegisterPage() {
 
                 <div className={styles.inputGroup}>
                     <label className={styles.label}>Name_Surname : </label>
-                    <input {...register("name_Surname")} className={styles.input}/>
+                    <input {...register("name_Surname")} className={styles.input} />
 
                     {
                         errors.name_Surname && (<span className={styles.errorText}>{errors.name_Surname.message}</span>)
@@ -48,7 +65,7 @@ export default function RegisterPage() {
 
                 <div className={styles.inputGroup}>
                     <label className={styles.label}>User : </label>
-                    <input {...register("user")} className={styles.input}/>
+                    <input {...register("user")} className={styles.input} />
 
                     {
                         errors.user && (<span className={styles.errorText}>{errors.user.message}</span>)
@@ -96,7 +113,7 @@ export default function RegisterPage() {
                     }
                 </div> */}
 
-                <button className={styles.submitButton}>Login</button>
+                <button className={styles.submitButton}>สมัครสมาชิก</button>
 
             </form>
         </div>
